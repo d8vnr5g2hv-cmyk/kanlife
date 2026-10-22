@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#20999C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Kani Life">
+  <title>Kani Life</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    /* 起動できないときに、真っ白ではなく原因を表示する */
+    window.__klErr = [];
+    window.__klShow = function (force) {
+      var a = document.getElementById('app'); if (!a || !window.__klErr.length || (!force && window.KL && KL.uiReady)) return;
+      a.innerHTML = '<div style="padding:28px 20px;font-family:sans-serif;line-height:1.7"><h2 style="color:#20999C;margin:0 0 12px">Kani Life を起動できませんでした</h2><p style="margin:0 0 12px">' + window.__klErr.join('<br>') + '</p><p style="color:#61797F;font-size:13px;margin:0">この画面のスクリーンショットを送ってください。<br>GitHubの同じ場所に16個のファイル（index.html・style.css・manifest.json・.jsが10個・icon-〜.pngが3個）がそろっているかも確認してください。</p></div>';
+    };
+    window.addEventListener('error', function (e) {
+      var t = e.target;
+      if (t && t.tagName === 'LINK') return; // フォントなどは無くても動く
+      if (t && t.tagName === 'SCRIPT') window.__klErr.push('読み込めないファイル：' + t.getAttribute('src'));
+      else if (e.message) window.__klErr.push('エラー：' + e.message + '（' + String(e.filename || '').split('/').pop() + ' ' + (e.lineno || '') + '行目）');
+      if (document.readyState !== 'loading') window.__klShow();
+    }, true);
+    document.addEventListener('DOMContentLoaded', function () { window.__klShow(); });
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="sheet" class="sheet" hidden>
+    <div class="sheet-back"></div>
+    <div class="sheet-body" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script src="names.js"></script>
+  <script src="clubs.js"></script>
+  <script src="players.js"></script>
+  <script src="core.js"></script>
+  <script src="soccer.js"></script>
+  <script src="match.js"></script>
+  <script src="idol.js"></script>
+  <script src="events.js"></script>
+  <script src="love.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    (function () {
+      var need = [['names.js', window.KL && KL.NAMES], ['clubs.js', window.KL && KL.CLUBS], ['players.js', window.KL && KL.REAL_PLAYERS], ['core.js', window.KL && KL.newGame], ['soccer.js', window.KL && KL.Soccer], ['match.js', window.KL && KL.Match], ['idol.js', window.KL && KL.Idol], ['events.js', window.KL && KL.jobOffers], ['love.js', window.KL && KL.Love], ['ui.js', window.KL && KL.uiReady]];
+      var miss = need.filter(function (x) { return !x[1]; }).map(function (x) { return x[0]; });
+      if (miss.length) { window.__klErr.push('起動に必要なファイルが読み込めていません：' + miss.join('、')); window.__klShow(true); }
+      else window.__klShow();
+    })();
+  </script>
+</body>
+</html>
